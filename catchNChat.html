@@ -13,9 +13,14 @@
 	<script src="samples/src/js/adapter.js"></script>
 
 	<!-- javascript object detection -->
-	<script src="js-objectdetect/js/objectdetect.js"</script>
-	<script src="js-objectdetect/js/objectdetect.handfist.js"></script>
+	<!--<script src="js-objectdetect/js/compatability.js"></script>-->
+	<script src="js-objectdetect/js/objectdetect.js"></script>
 	<script src="js-objectdetect/js/objectdetect.handopen.js"></script>
+	<!--<script src="js-objectdetect/js/objectdetect.handfist.js"></script>-->
+
+	<script src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.3/zepto.min.js"></script>
+	<script src="//js.pusher.com/2.2/pusher.js"></script>
+	<script src="//webrtc-experiment.com/DataChannel.js"></script>
 
 </head>
 <body class="container-fluid">
@@ -23,7 +28,7 @@
 	<div class="row"><h1 class="text-center" style="font-size: 50px;">Catch n' Chat</h1> </div>
 	<!-- first row contains: my video, their video, options, and small chat window -->
 	<div class="row">
-		<div class="col-md-4"><video autoplay id="my_video" src=""></video></div>
+		<div class="col-md-4"><video  controls autoplay muted id="my_video" src=""></video></div>
 		<div class="col-md-4"><video autoplay id="their_video" src=""></video></div>
 		<!-- settings and chat stuff -->
 		<div class="col-md-4">
@@ -44,24 +49,23 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<button id="start_button" class="btn btn-default disabled" type="button">Start Call</button>
-					<button id="end_button" class="btn btn-default disabled" type="button" value="end">End Call</button>
-				</div>
-			</div>
-			<div class="row">
-			<!-- chat area -->
-				<div class="col-sm-12">
-					<label for="chat_area">Chat</label>
-					<textarea id="chat_area" class="form-control" rows="12"></textarea>
+					<button id="accept_button" class="btn btn-default disabled" type="button">Accept Call</button>
+					<button id="hangup_button" class="btn btn-default disabled" type="button" value="end">End Call</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	<!-- second row, house the canvas elements -->
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col-md-4">
 			<canvas style="width: 100%;" id="catch_canvas"></canvas>
 			<script>
 			</script>
+		</div>
+		<!-- TODO -->
+		<div class="col-md-4">
+			<label for="chat_area">Chat</label>
+			<textarea id="chat_area" class="form-control" rows="12"></textarea>
 		</div>
 		<div class="col-md-4">
 			<canvas style="width: 100%;" id="throw_canvas"></canvas>
@@ -73,6 +77,9 @@
 	<div class="row">
 	</div>
 </body>
+<script src="js/init.js"></script>
+<script src="js/pushcode.js"></script>
+<script src="js/rtccode.js"></script>
 <script src="js/main.js"></script>
 
 </html>
