@@ -11,14 +11,21 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<!-- google rtc things -->
 	<script src="samples/src/js/adapter.js"></script>
+
+	<!-- javascript object detection -->
+	<script src="js-objectdetect/objectdetect.js"</script>
+	<script src="js-objectdetect/objectdetect.handfist.js"></script>
+	<script src="js-objectdetect/objectdetect.handopen.js"></script>
+
 </head>
 <body class="container-fluid">
 	<!-- title -->
-	<div class="row"><h1 class="text-center">Catch n' Chat</h1></div>
+	<div class="row"><h1 class="text-center" style="font-size: 50px;">Catch n' Chat</h1> </div>
 	<!-- first row contains: my video, their video, options, and small chat window -->
 	<div class="row">
-		<div class="col-md-4"><video autoplay id="my_video"></video></div>
-		<div class="col-md-4"><video autoplay id="their_video"></video></div>
+		<div class="col-md-4"><video autoplay id="my_video" src=""></video></div>
+		<div class="col-md-4"><video autoplay id="their_video" src=""></video></div>
+		<!-- settings and chat stuff -->
 		<div class="col-md-4">
 			<!-- channel -->
 			<div class="row">
@@ -52,36 +59,20 @@
 	<!-- second row, house the canvas elements -->
 	<div class="row">
 		<div class="col-md-8">
-			<canvas id="catch_canvas"></canvas>
+			<canvas style="width: 100%;" id="catch_canvas"></canvas>
+			<script>
+			</script>
 		</div>
 		<div class="col-md-4">
-			<canvas id="throw_canvas"></canvas>
+			<canvas style="width: 100%;" id="throw_canvas"></canvas>
+			<script>
+			</script>
 		</div>
 	</div>
+	<!-- credits, cause we made it we want recognition -->
+	<div class="row">
+	</div>
 </body>
-<script>
-/* get my video instantly */
-var myVideo = document.querySelector('#my_video');
-var theirVideo = document.querySelector('#their_video');
-
-function gotMedia(stream){
-	window.stream = stream;
-	if(window.URL){
-		myVideo.src = window.URL.createObjectURL(stream);
-		theirVideo.src = window.URL.createObjectURL(stream);
-	}
-	else {
-		myVideo.src = stream;
-		theirVideo.src = window.URL.createObjectURL(stream);
-	}
-		
-}
-
-function errorGetMedia(e){
-	console.log('navigator.getUserMedia() failed miserably');
-	alert('need to see your face fool');
-}
-navigator.getUserMedia({ audio: false, video: true }, gotMedia, errorGetMedia);
-</script>
+<script src="js/main.js"></script>
 
 </html>
