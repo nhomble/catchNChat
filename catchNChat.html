@@ -1,149 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 <head>
-<title>Pusher Test</title>
-<script src="//js.pusher.com/2.2/pusher.min.js" type="text/javascript"></script>
-<script src="//webrtc-experiment.com/DataChannel.js"></script>
-<script src="js/datachannel-demo.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.3/zepto.min.js"></script>
-<!-- simple example of server broadcast -->
-<script type="text/javascript">
-	// Enable pusher logging - don't include this in production
-	Pusher.log = function(message) {
-		if (window.console && window.console.log) {
-			window.console.log(message);
-		}
-    };
-	var pusher = new Pusher('cb775456890fa77b26de');
-	var channel = pusher.subscribe('test_channel');
-	channel.bind('my_event', function(data) {
-		alert(data.message);
-	});
-</script>
-
-<!--
-<script>
-var datachannel = new DataChannel();
-datachannel.userid = window.userid;
-
-// Storage of Pusher connection socket ID
-var socketId;
-
-// Pusher.log = function(message) {
-//   if (window.console && window.console.log) {
-//     window.console.log(message);
-//   }
-// };
-
-// Monitor Pusher connection state
-pusher.connection.bind("state_change", function(states) {
-	switch (states.current) {
-		case "connected":
-	        socketId = pusher.connection.socket_id;
-		    break;
-		case "disconnected":
-		case "failed":
-		case "unavailable":
-		    break;
-	}
-});
-
-datachannel.openSignalingChannel = function(config) {
-	var channel = config.channel || this.channel || "default-channel";
-	var xhrErrorCount = 0;
-	var socket = {
-		send: function(message){
-			$.ajax({
-				type: "POST",
-				url: "/message",
-				data: {
-					socketId: socketId,
-					channel: channel,
-					message: message
-				},
-				timeout: 1000,
-				success: function(data) {
-					xhrErrorCount = 0;
-				},
-				error: function(xhr, type){
-					xhrErrorCount++;
-					if(xhrErrorCount > 5){
-						console.log("disabling signaller due to connection failure");
-						datachannel.transmitRoomOnce = true;
-					}
-				}
-			});
-		},
-		channel: channel
-	};
-	var pusherChannel = pusher.subscribe(channel);
-	pusherChannel.bind("pusher:subscription_succeeded", function(){
-		if (config.callback) config.callback(socket);
-	});
-
-	pusherChannel.bind("message", function(message){
-		config.onmessage(message);
-	});
-	return socket;
-};
-
-</script>
-
--->
-<script>
-var datachannel = new DataChannel();
-datachannel.userid = window.userid;
-
-// Storage of Pusher connection socket ID
-var socketId;
-
-// Pusher.log = function(message) {
-//   if (window.console && window.console.log) {
-//     window.console.log(message);
-//   }
-// };
-
-// Monitor Pusher connection state
-pusher.connection.bind("state_change", function(states) {
-	switch (states.current) {
-		case "connected":
-	        socketId = pusher.connection.socket_id;
-		    break;
-		case "disconnected":
-		case "failed":
-		case "unavailable":
-		    break;
-	}
-});
-
-
-</script>
-<script>
-(function(){
-	var mediaOptions = { audio: false, video: true };
-    if (!navigator.getUserMedia) {
-		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-	}
-			  
-	if (!navigator.getUserMedia){
-		return alert('getUserMedia not supported in this browser.');
-	}
-					   
-	navigator.getUserMedia(mediaOptions, success, function(e) {
-		console.log(e);
-	});
-					    
-	function success(stream){
-		var video = document.querySelector("#vid");
-		video.src = window.URL.createObjectURL(stream);
-	}
-})();
-</script>
-<body>
-</body>
-<h1>Catch n' Chat</h1>
+<title>Catch N' Chat</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<!-- google rtc things -->
+	<script src="samples/src/js/adapter.js"></script>
 </head>
-<body>
-	<video id="vid" autoplay="true"></video>
+<body class="container-fluid">
+	<!-- title -->
+	<div class="row"><h1 class="text-center">Catch n' Chat</h1></div>
+	<!-- first row contains: my video, their video, options, and small chat window -->
+	<div class="row">
+		<div class="col-md-4"><video autoplay id="my_video"></video></div>
+		<div class="col-md-4"><video autoplay id="their_video"></video></div>
+		<div class="col-md-4">
+			<!-- channel -->
+			<div class="row">
+				<div class="col-sm-12">
+					<form class="form-inline">
+						<div class="form-group">
+							<label for="channel_name">Channel Name</label>
+							<input type="text" class="form-control" id="channel_name" placeholder=""></input>
+							<button id="create_channel_button" class="btn btn-default" type="button">Create Channel</button>
+							<button id="join_channel_button" class="btn btn-default" type="button" placeholder="">Join Channel</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<!-- start/end call -->
+			<div class="row">
+				<div class="col-sm-12">
+					<button id="start_button" class="btn btn-default disabled" type="button">Start Call</button>
+					<button id="end_button" class="btn btn-default disabled" type="button" value="end">End Call</button>
+				</div>
+			</div>
+			<div class="row">
+			<!-- chat area -->
+				<div class="col-sm-12">
+					<label for="chat_area">Chat</label>
+					<textarea id="chat_area" class="form-control" rows="12"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- second row, house the canvas elements -->
+	<div class="row">
+		<div class="col-md-8">
+			<canvas id="catch_canvas"></canvas>
+		</div>
+		<div class="col-md-4">
+			<canvas id="throw_canvas"></canvas>
+		</div>
+	</div>
 </body>
+<script>
+/* get my video instantly */
+var myVideo = document.querySelector('#my_video');
+var theirVideo = document.querySelector('#their_video');
+
+function gotMedia(stream){
+	window.stream = stream;
+	if(window.URL){
+		myVideo.src = window.URL.createObjectURL(stream);
+		theirVideo.src = window.URL.createObjectURL(stream);
+	}
+	else {
+		myVideo.src = stream;
+		theirVideo.src = window.URL.createObjectURL(stream);
+	}
+		
+}
+
+function errorGetMedia(e){
+	console.log('navigator.getUserMedia() failed miserably');
+	alert('need to see your face fool');
+}
+navigator.getUserMedia({ audio: false, video: true }, gotMedia, errorGetMedia);
+</script>
+
 </html>
